@@ -4,6 +4,11 @@
 <f:layout name="Wizard" />
 
 <f:section name="Main">
+    <f:if condition="{data.generatePageTitleFailed}">
+        <div class="alert alert-danger" role="alert">
+            <strong>Catching data via generatePageTitle failed due to fe_group being set. Providing fallback title with default configuration.</strong>
+        </div>
+    </f:if>
     <f:if condition="{data}">
         <f:then>
             <h3 class="js-cs-seo-title"

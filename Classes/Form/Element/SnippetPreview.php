@@ -141,9 +141,17 @@ class SnippetPreview extends AbstractNode
                     if ($table == 'pages') {
                         $this->getTypoScriptFrontendController()->config['config']['noPageTitle'] = 0;
 
-                        $this->getTypoScriptFrontendController()->generatePageTitle();
+                        try {
+                            $this->getTypoScriptFrontendController()->generatePageTitle();
+                        } catch (\Throwable $th) {
+                            $data['generatePageTitleFailed'] = true;
+                            $pageTitle = (!empty($data['seo_title'])) ? $data['seo_title'] : $data['title'];
+                            $pageTitle .= ' ' . $pageTitleSeparator . ' ' . $siteTitle;
+                        }
 
-                        $pageTitle = static::getPageRenderer()->getTitle();
+                        if (!isset($pageTitle)) {
+                            $pageTitle = static::getPageRenderer()->getTitle();
+                        }
 
                         // get page path
                         $path = $TSFEUtility->getPagePath();
